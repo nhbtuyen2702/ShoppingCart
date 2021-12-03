@@ -10,12 +10,12 @@ public class Utils {
 	// Thông tin các mặt hàng đã mua, được lưu trữ trong Session.
 	public static CartInfo getCartInfoInSession(HttpServletRequest request) {
 		// Thông tin giỏ hàng có thể đã lưu vào trong Session trước đó.
-		CartInfo cartInfo = (CartInfo) request.getSession().getAttribute("myCartInfo");
+		CartInfo cartInfo = (CartInfo) request.getSession().getAttribute("myCartInfo");//key -->sẽ lấy đc value là cartInfo
 		// Nếu chưa tạo giỏ hàng, tạo nó.	
 		if (cartInfo == null) {
 			cartInfo = new CartInfo();
 			// Và lưu vào trong session.
-			request.getSession().setAttribute("myCartInfo", cartInfo);
+			request.getSession().setAttribute("myCartInfo", cartInfo);//key: myCartInfo, value: cartInfo
 		}
 
 		return cartInfo;

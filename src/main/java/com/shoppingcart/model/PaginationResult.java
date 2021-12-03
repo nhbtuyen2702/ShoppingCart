@@ -7,13 +7,13 @@ import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.query.Query;
 
-public class PaginationResult<E> {//E = ProductInfo
+public class PaginationResult<E> {//E = ProductInfo E = OrderInfo
 
 	private int totalRecords;
 
 	private int currentPage;
 
-	private List<E> list; //List<ProductInfo> list = null;
+	private List<E> list; //List<ProductInfo> list = null; List<OrderInfo> list = null;
 
 	private int maxResult;
 
@@ -87,7 +87,7 @@ public class PaginationResult<E> {//E = ProductInfo
 
 		ScrollableResults resultScroll = query.scroll(ScrollMode.SCROLL_INSENSITIVE);
 
-		List<E> results = new ArrayList<E>();//List<ProductInfo> results = new ArrayList<ProductInfo>();
+		List<E> results = new ArrayList<E>();//List<ProductInfo> results = new ArrayList<ProductInfo>(); //List<OrderInfo> results = new ArrayList<OrderInfo>();
 
 		boolean hasResult = resultScroll.first();
 
@@ -97,7 +97,7 @@ public class PaginationResult<E> {//E = ProductInfo
 			if (hasResult) {
 				do {
 					int rowNumber = resultScroll.getRowNumber();
-					E record = (E) resultScroll.get(0);//ProductInfo record = (ProductInfo)resultScroll.get(0);
+					E record = (E) resultScroll.get(0);//ProductInfo record = (ProductInfo)resultScroll.get(0); //OrderInfo record = (OrderInfo)resultScroll.get(0);
 					results.add(record);//results.add(record);
 				} while (resultScroll.next() //resultScroll.next() có nhiệm vụ là kiểm tra phần tử kế tiếp có tồn tại hay ko, nếu có sẽ trỏ tới phần tử kế tiếp
 						&& resultScroll.getRowNumber() >= fromRecordIndex //10>=5
@@ -120,7 +120,7 @@ public class PaginationResult<E> {//E = ProductInfo
 		this.list = results;
 		this.maxResult = maxResult;
 
-		this.totalPages = (this.totalRecords / this.maxResult) + 1; //60 / 5 = 12
+		this.totalPages = (this.totalRecords / this.maxResult) + 1; //38 / 5 + 1= 8
 		this.maxNavigationPage = maxNavigationPage;//10 
 
 		if (maxNavigationPage < this.totalPages) {
@@ -136,24 +136,32 @@ public class PaginationResult<E> {//E = ProductInfo
 
 		int current = this.currentPage > this.totalPages ? this.totalPages : this.currentPage;
 
-		//TODO -4 -3 -2 -1 1 2 3 4 5 6 -->current = 2
-		int begin = current - this.maxNavigationPage / 2;
-		int end = current + this.maxNavigationPage / 2;
+		//TODO -4 -3 -2 -1 0 1 2 3 4 5 6 -->current = 1
+		int begin = current - this.maxNavigationPage / 2;// 3 - 10/2 = -2
+		int end = current + this.maxNavigationPage / 2; // 3 + 10/2 = 8
 
-		//this.totalPages = 20;
-		//int begin = -3; //current = 8
-		//int end = 17;
+		//this.totalPages = 8; //current = 8
+		//int begin = 3; //6
+		//int end = 13;
+		
+		//this.totalPages = 9; //current = 8
+		//int begin = 4; //6
+		//int end = 14;
+		
+		//this.totalPages = 8;
+		//int begin = -2;
+		//int end = 8;
 		
  		// Trang đầu tiên
-		this.navigationPages.add(1);
+		this.navigationPages.add(1);//1
 		if (begin > 2) {
 			// Dùng cho '...'
-			this.navigationPages.add(-1);
+			this.navigationPages.add(-1);// 1 -1 
 		}
 
-		for (int i = begin; i < end; i++) {
+		for (int i = begin; i < end; i++) { // 1 -1  4 5 6 7 8 9 
 			if (i > 1 && i < this.totalPages) {
-				this.navigationPages.add(i);
+				this.navigationPages.add(i);//[1, -1, 3, 4, 5, 6, 7]
 			}
 		}
 
@@ -164,6 +172,6 @@ public class PaginationResult<E> {//E = ProductInfo
 		//TODO
 		
 		// Trang cuối cùng.
-		this.navigationPages.add(this.totalPages);
+		this.navigationPages.add(this.totalPages);//[1, -1, 3, 4, 5, 6, 7, 8]
 	}
 }

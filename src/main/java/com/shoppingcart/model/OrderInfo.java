@@ -28,7 +28,7 @@ public class OrderInfo {
 	public OrderInfo(String id, Date orderDate, int orderNum, double amount, String customerName,
 			String customerAddress, String customerEmail, String customerPhone) {
 		super();
-		this.id = id;
+		this.id = id;//6fa843e8-e01a-4803-84b9-9eea1807b832
 		this.orderDate = orderDate;
 		this.orderNum = orderNum;
 		this.amount = amount;
